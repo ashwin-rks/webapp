@@ -1,0 +1,23 @@
+.motivationText {
+  font-size: 5rem;
+  font-family: "Anton", sans-serif;
+}
+
+.signup-form {
+  width: 90%;
+}
+
+.signup-background {
+  background-color: transparent; 
+}
+
+@media (min-width: 768px) {
+  .signup-background {
+    background-image: url('../../imgs/login_background.svg'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100vw;  
+    height: 100vh; 
+  }
+}

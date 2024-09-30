@@ -1,0 +1,14 @@
+:root {
+  --majorelle-blue: #5949f4;
+  --aero: #06bee1;
+  --rich-black: #001220;
+}
+
+.fontColor {
+  color: var(--majorelle-blue);
+}
+
+.roundedBorder {
+  border: 2px solid var(--majorelle-blue);
+  border-radius: 8px;
+}
