@@ -1,9 +1,20 @@
-import React from 'react'
+import React from 'react';
+import Navbar from '../UIComponents/Navbar';
+import Sidebar from '../UIComponents/Sidebar';
+import './dashboard.css';
 
 const Dashboard = () => {
   return (
-    <div>Dashboard</div>
-  )
-}
+    <div className="dashboard-container">
+      <Sidebar />
+      <div className="content-wrapper">
+        <Navbar />
+        <div className="main-content">
 
-export default Dashboard
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;
