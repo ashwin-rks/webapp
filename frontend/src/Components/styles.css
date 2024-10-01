@@ -28,7 +28,8 @@
 /* Global form control effect */
 .form-control {
   color: var(--rich-black);
-  transition: all 0.3s ease; 
+  transition: all 0.3s ease;
+  border-color: var(--majorelle-blue);
 }
 .form-control:focus {
   color: var(--rich-black);

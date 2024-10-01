@@ -4,6 +4,16 @@
   cursor: default;
 }
 
+.motivationText .highlight-text {
+  background-color: var(--majorelle-blue);
+  color: white;
+}
+
+.motivationText .sub-text {
+  color: var(--aero);
+}
+
+
 .notBtn {
   color: var(--aero);
   background-color: white;
