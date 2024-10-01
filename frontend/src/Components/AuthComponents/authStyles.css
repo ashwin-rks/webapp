@@ -1,0 +1,41 @@
+.motivationText {
+  font-size: 5rem;
+  font-family: "Anton", sans-serif;
+  cursor: default;
+}
+
+.motivationText .highlight-text {
+  background-color: var(--majorelle-blue);
+  color: white;
+}
+
+.motivationText .sub-text {
+  color: var(--aero);
+}
+
+
+.notBtn {
+  color: var(--aero);
+  background-color: white;
+  border: 0px;
+  text-decoration: underline;
+}
+
+.signup-form, .login-form {
+  width: 90%;
+}
+
+.signup-background, .login-background {
+  background-color: transparent; 
+}
+
+@media (min-width: 768px) {
+  .signup-background, .login-background {
+    background-image: url('../../imgs/login_background.svg'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100vw;  
+    height: 100vh; 
+  }
+}

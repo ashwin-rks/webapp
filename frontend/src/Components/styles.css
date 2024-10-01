@@ -1,0 +1,38 @@
+:root {
+  --majorelle-blue: #5949f4;
+  --aero: #06bee1;
+  --rich-black: #001220;
+}
+
+/* quick classes */
+.fontColor {
+  color: var(--majorelle-blue);
+}
+
+.roundedBorder {
+  border: 2px solid var(--majorelle-blue);
+  border-radius: 8px;
+}
+
+.btnColor {
+  color: white;
+  background-color: var(--majorelle-blue);
+}
+
+.btnColor:hover{
+  color: white;
+  background-color: rgb(72, 59, 206);
+}
+
+
+/* Global form control effect */
+.form-control {
+  color: var(--rich-black);
+  transition: all 0.3s ease;
+  border-color: var(--majorelle-blue);
+}
+.form-control:focus {
+  color: var(--rich-black);
+  border-color: var(--majorelle-blue); 
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); 
+}
