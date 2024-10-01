@@ -7,14 +7,17 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "jsonwebtoken": "^9.0.2",
-    "nodemon": "^3.1.7",
     "pg": "^8.13.0"
   },
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "nodemon --experimental-modules index.js",  
     "run": "node index.js"
   },
   "devDependencies": {
-    "prisma": "^5.20.0"
+    "prisma": "^5.20.0",
+    "nodemon": "^3.1.7"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   }
 }
