@@ -27,7 +27,7 @@ export const login = async (req, res) => {
 
     // assign jwt
     const token = jwt.sign(
-      { userId: user.id, account_type: user.account_type },
+      { userId: user.id, account_type: user.account_type, name: user.first_name },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "10h" }
     );
@@ -35,6 +35,7 @@ export const login = async (req, res) => {
     return res.status(200).json({
       token,
       user: {
+        name: user.first_name,
         account_type: user.account_type,
       },
     });
