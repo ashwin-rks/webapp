@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
         });
         if (response.status === 200 && response.data.user) {
           setIsAuthenticated(true);
-          setIsAdmin(response.data.user.userType === 'admin');
+          setIsAdmin(response.data.user.account_type === 'admin');
         } else {
           localStorage.clear('token');
           setIsAuthenticated(false);

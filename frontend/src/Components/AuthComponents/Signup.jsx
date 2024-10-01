@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import "../styles.css";
@@ -100,6 +100,7 @@ const Signup = () => {
         console.log(response);
         if (response.status === 201) {
           console.log("Signup successful", response.data);
+          toast.success("Signup successful");
           navigate("/login");
         } else {
           console.error("Signup failed:", response.data.message);

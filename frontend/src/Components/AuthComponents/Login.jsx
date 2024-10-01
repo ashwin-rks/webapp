@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import "../styles.css";
@@ -69,6 +69,7 @@ const Login = () => {
         });
         if (response.status === 200) {
           localStorage.setItem("token", response.data.token);
+          toast.success("Logged in");
           navigate("/home");
         } else {
           console.error("Login failed:", response.data.error);
