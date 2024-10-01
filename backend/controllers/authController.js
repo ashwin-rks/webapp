@@ -46,6 +46,7 @@ export const login = async (req, res) => {
 export const signup = async (req, res) => {
   try {
     const { first_name, last_name, account_type, email, password, department } = req.body;
+    const departmentId = parseInt(department, 10);
 
     // Check for required fields
     if (!email || !password || !first_name || !last_name || !account_type) {
@@ -64,11 +65,11 @@ export const signup = async (req, res) => {
       return res.status(400).send({error: 'Invalid account type'});
     }
 
-    if (account_type == 'admin' && department != 1) {
+    if (account_type == 'admin' && departmentId != 1) {
       return res.status(400).send({error: "Admin must be a Manager"})
     }
 
-    if (account_type != 'admin' && department == 1) {
+    if (account_type != 'admin' && departmentId == 1) {
       return res.status(400).send({error: "Wrong department code"})
     }
 
@@ -82,8 +83,7 @@ export const signup = async (req, res) => {
         account_type: account_type,
         email: email,
         password: hashedPassword,
-        department: department
-      },
+        department: { connect: { dept_id: departmentId } },      },
     });
 
     const { password: _, ...userWithoutPassword } = newUser;
