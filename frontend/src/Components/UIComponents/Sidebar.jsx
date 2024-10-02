@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaHome, FaUser, FaCog, FaInfoCircle, FaEnvelope } from "react-icons/fa";
+import { FaHome, FaUser, FaGraduationCap } from "react-icons/fa";
+import { MdGroups } from "react-icons/md";
+import { TfiStatsUp } from "react-icons/tfi";
 import LogoSVG from "../../imgs/logo.svg"; // Ensure you have the logo
 import './sidebar.css';
 
@@ -21,27 +23,27 @@ const Sidebar = () => {
           </Link>
         </li>
         <li className="nav-item">
+          <Link to="/home/department" className="nav-link d-flex align-items-center">
+            <MdGroups className="icon" />
+            <span className="menu-text">Department</span>
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link to="/home/courses" className="nav-link d-flex align-items-center">
+            <FaGraduationCap className="icon" />
+            <span className="menu-text">Courses</span>
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link to="/home/skills" className="nav-link d-flex align-items-center">
+            <TfiStatsUp className="icon" />
+            <span className="menu-text">Skills</span>
+          </Link>
+        </li>
+        <li className="nav-item">
           <Link to="/profile" className="nav-link d-flex align-items-center">
             <FaUser className="icon" />
             <span className="menu-text">Profile</span>
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link to="/settings" className="nav-link d-flex align-items-center">
-            <FaCog className="icon" />
-            <span className="menu-text">Settings</span>
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link to="/about" className="nav-link d-flex align-items-center">
-            <FaInfoCircle className="icon" />
-            <span className="menu-text">About</span>
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link to="/contact" className="nav-link d-flex align-items-center">
-            <FaEnvelope className="icon" />
-            <span className="menu-text">Contact</span>
           </Link>
         </li>
       </ul>

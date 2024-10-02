@@ -13,18 +13,52 @@ model User {
   last_name    String                                                     
   email        String   @unique                        
   password     String                                  
-  account_type String                                  
+  account_type String                                   // e.g., admin, user
 
   department   Department @relation(fields: [dept_id], references: [dept_id])
   dept_id      Int
 
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+
+  skills       SkillUsers[] // Relation to SkillUsers
 }
 
 model Department {
   dept_id         Int      @id @default(autoincrement())
-  dept_name String
+  dept_name       String
   
-  users           User[]
+  users           User[]         // Relation to User
+  skillDepartments SkillDepartment[] // Relation to SkillDepartment
+}
+
+model Skill {
+  skill_id   Int       @id @default(autoincrement())
+  skill_name String
+
+  skillDepartments SkillDepartment[] // Relation to SkillDepartment
+  skillUsers       SkillUsers[]       // Relation to SkillUsers
+}
+
+model SkillDepartment {
+  id          Int       @id @default(autoincrement())
+  skill_id    Int
+  dept_id     Int
+
+  skill       Skill     @relation(fields: [skill_id], references: [skill_id])
+  department  Department @relation(fields: [dept_id], references: [dept_id])
+
+  @@unique([skill_id, dept_id]) // Ensure a unique combination of skill and department
+}
+
+model SkillUsers {
+  id          Int       @id @default(autoincrement())
+  skill_id    Int
+  user_id     Int
+  competency  String
+
+  skill       Skill     @relation(fields: [skill_id], references: [skill_id])
+  user        User      @relation(fields: [user_id], references: [user_id])
+
+  @@unique([skill_id, user_id]) // Ensure a user can only have one entry per skill
 }

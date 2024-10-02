@@ -1,8 +1,8 @@
 import React from "react";
+import { Outlet } from "react-router-dom";
 import Navbar from "../UIComponents/Navbar";
 import Sidebar from "../UIComponents/Sidebar";
 import "./dashboard.css";
-import Departments from "./AdminComponents/Departments";
 
 const Dashboard = () => {
   return (
@@ -11,7 +11,7 @@ const Dashboard = () => {
       <div className="content-wrapper">
         <Navbar />
         <div className="main-content">
-          <Departments />
+          <Outlet />
         </div>
       </div>
     </div>

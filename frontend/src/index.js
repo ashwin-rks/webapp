@@ -16,6 +16,10 @@ import PrivateRoute from './Components/PrivateRoute';
 // Profile Components
 import Dashboard from './Components/ProfileComponents/Dashboard';
 
+// Admin Compnents
+import Departments from './Components/ProfileComponents/AdminComponents/Departments';
+import Skills from './Components/ProfileComponents/AdminComponents/Skills';
+
 
 const router = createBrowserRouter([
   {
@@ -33,6 +37,16 @@ const router = createBrowserRouter([
   {
     path: "/home",
     element: <PrivateRoute component={Dashboard} />,
+    children: [
+      {
+        path: "department",
+        element: <Departments />, 
+      },
+      {
+        path: "skills",
+        element: <Skills />
+      }
+    ]
   },
   // {
   //   path: "*",
