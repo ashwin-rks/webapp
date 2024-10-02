@@ -31,8 +31,15 @@
   transition: all 0.3s ease;
   border-color: var(--majorelle-blue);
 }
+
 .form-control:focus {
   color: var(--rich-black);
   border-color: var(--majorelle-blue); 
   box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); 
+}
+
+.form-control-error {
+  color: var(--rich-black);
+  border-color: rgb(200, 0, 0); 
+  box-shadow: 0 0 8px rgba(200, 0, 0, 0.5); 
 }

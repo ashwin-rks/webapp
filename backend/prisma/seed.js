@@ -3,14 +3,25 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.department.upsert({
-    where: { dept_id: 1 },
-    update: {},
-    create: {
-      dept_id: 1,
-      dept_name: 'Manager',
+  const existingDepartment = await prisma.department.findFirst({
+    where: {
+      dept_name: {
+        equals: 'Manager',
+        mode: 'insensitive', 
+      },
     },
   });
+
+  if (existingDepartment) {
+    console.log('Department "Manager" already exists');
+  } else {
+    await prisma.department.create({
+      data: {
+        dept_name: 'Manager',
+      },
+    });
+    console.log('Department "Manager" created successfully');
+  }
 }
 
 main()
