@@ -19,6 +19,7 @@ import Dashboard from './Components/ProfileComponents/Dashboard';
 // Admin Compnents
 import Departments from './Components/ProfileComponents/AdminComponents/Departments';
 import Skills from './Components/ProfileComponents/AdminComponents/Skills';
+import Course from './Components/ProfileComponents/AdminComponents/Course';
 
 
 const router = createBrowserRouter([
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: "skills",
         element: <Skills />
+      },
+      {
+        path: "courses",
+        element: <Course />
       }
     ]
   },

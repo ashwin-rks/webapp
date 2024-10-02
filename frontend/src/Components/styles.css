@@ -30,6 +30,7 @@
 }
 
 .btnColorSecondary:hover {
+  color: var(--rich-black);
   background-color: rgb(6, 176, 187);
 }
 
@@ -76,5 +77,15 @@
 }
 
 .tableBody tr:hover td {
-  background-color: #E1D8FF; /* Change the background color on hover */
+  background-color: #E1D8FF; 
+}
+
+/* card */
+
+.card {
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.05);
 }

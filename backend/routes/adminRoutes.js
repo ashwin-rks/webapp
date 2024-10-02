@@ -1,8 +1,11 @@
 import express from "express";
 import {
+  addCourse,
   addDepartment,
   addSkill,
+  editCourse,
   editSkill,
+  getAllCoursesInfo,
   getAllSkillsInfo,
   getDepartmentsWithInfo,
   updateDepartment,
@@ -25,5 +28,10 @@ router.get("/get-departments", getDepartmentsWithInfo);
 router.post("/add-skill", addSkill);
 router.get('/get-skills', getAllSkillsInfo);
 router.patch('/edit-skill', editSkill);
+
+// courses
+router.post("/add-course", addCourse);
+router.get('/get-courses', getAllCoursesInfo);
+router.patch('/edit-course', editCourse);
 
 export default router;
