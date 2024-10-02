@@ -9,7 +9,9 @@ const AddDepartments = ({ existingDepartments }) => {
   const [departmentName, setDepartmentName] = useState("")
   const [error, setError] = useState(false);
 
-  
+  const existingDepartmentNames = existingDepartments.map(
+    (department) => department.name
+  );
 
   const handleChange = (e) => {
     setDepartmentName(e.target.value)
@@ -24,7 +26,7 @@ const AddDepartments = ({ existingDepartments }) => {
       return;
     }
 
-    if (existingDepartments.some(dep => dep.toLowerCase() === departmentName.toLowerCase())) {
+    if (existingDepartmentNames.some(dep => dep.toLowerCase() === departmentName.toLowerCase())) {
       toast.error('Department Already Exists')
       setError(true);
       return;

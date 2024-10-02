@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import AddDepartments from "./AddDepartments";
+import DepartmentTable from "./DepartmentTable";
 
 const Departments = () => {
   const [existingDepartments, setExistingDepartments] = useState([]);
@@ -18,10 +19,7 @@ const Departments = () => {
         );
 
         if (response.status === 200) {
-          const departmentNames = response.data.map(
-            (department) => department.name
-          );
-          setExistingDepartments(departmentNames);
+          setExistingDepartments(response.data);
         }
       } catch (error) {
         console.error("Error fetching departments:", error);
@@ -39,6 +37,14 @@ const Departments = () => {
           <AddDepartments existingDepartments={existingDepartments} />
         </div>
       </div>
+
+      {/* Departments Table */}
+      <div className="row">
+        <div className="col-12">
+          <DepartmentTable departments={existingDepartments} />
+        </div>
+      </div>
+
     </div>
   );
 };
