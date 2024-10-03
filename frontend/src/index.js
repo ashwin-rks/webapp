@@ -24,6 +24,7 @@ import Course from './Components/ProfileComponents/AdminComponents/Course';
 
 // User Components
 import UserCourses from './Components/ProfileComponents/UserComponents/UserCourses';
+import UserSkills from './Components/ProfileComponents/UserComponents/UserSkills';
 
 const router = createBrowserRouter([
   {
@@ -67,6 +68,10 @@ const router = createBrowserRouter([
       {
         path: 'courses',
         element: <UserCourses />
+      },
+      {
+        path: 'skills',
+        element: <UserSkills />
       },
       {
         path: 'profile',

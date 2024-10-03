@@ -2,7 +2,6 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-
 export const getAllSkillsInfo = async (req, res) => {
   try {
     const skills = await prisma.skill.findMany({
@@ -47,12 +46,10 @@ export const addSkill = async (req, res) => {
 
   // Ensure both skillName and departmentNames are provided
   if (!skillName || !departmentNames || !Array.isArray(departmentNames)) {
-    return res
-      .status(400)
-      .json({
-        error:
-          "Skill name and department names are required and must be an array",
-      });
+    return res.status(400).json({
+      error:
+        "Skill name and department names are required and must be an array",
+    });
   }
 
   try {
@@ -188,5 +185,204 @@ export const editSkill = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error updating skill" });
+  }
+};
+
+// user skills
+
+export const addSkillForUser = async (req, res) => {
+  try {
+    // 1. Check if the user exists and their account_type is 'user'
+    const user = await prisma.user.findUnique({
+      where: {
+        user_id: req.user.userId,
+      },
+      select: {
+        account_type: true,
+        dept_id: true,
+      },
+    });
+
+    if (!user || user.account_type !== "user") {
+      return res
+        .status(403)
+        .json({ message: "Access denied or user not found" });
+    }
+
+    const { dept_id } = user;
+
+    // 2. Extract skill_id and competency from the request body
+    const { skill_id, competency } = req.body;
+
+    if (!skill_id || !competency) {
+      return res
+        .status(400)
+        .json({ message: "Skill ID and competency are required" });
+    }
+
+    // 3. Check if the skill exists
+    const skill = await prisma.skill.findUnique({
+      where: { skill_id },
+    });
+
+    if (!skill) {
+      return res.status(404).json({ message: "Skill not found" });
+    }
+
+    // 4. Check if the skill_id and dept_id combination exists in SkillDepartment table
+    const skillDeptExists = await prisma.skillDepartment.findUnique({
+      where: {
+        skill_id_dept_id: { skill_id, dept_id }, // using the unique combination
+      },
+    });
+
+    if (!skillDeptExists) {
+      return res.status(400).json({
+        message: "This skill is not associated with your department",
+      });
+    }
+
+    // 5. Check if the user_id and skill_id combination already exists in SkillUsers
+    const skillUserExists = await prisma.skillUsers.findUnique({
+      where: {
+        skill_id_user_id: { skill_id, user_id: req.user.userId }, // using the unique combination
+      },
+    });
+
+    if (skillUserExists) {
+      return res
+        .status(400)
+        .json({ message: "Skill already added for this user" });
+    }
+
+    // 6. Add the skill to the SkillUsers table
+    const newSkillUser = await prisma.skillUsers.create({
+      data: {
+        skill_id,
+        user_id: req.user.userId,
+        competency,
+      },
+    });
+
+    return res
+      .status(201)
+      .json({ message: "Skill added successfully", newSkillUser });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error adding skill for user" });
+  }
+};
+
+export const getUserSkillsInfo = async (req, res) => {
+  try {
+    // 1. Check if the user exists and get their dept_id
+    const user = await prisma.user.findUnique({
+      where: {
+        user_id: req.user.userId,
+      },
+      select: {
+        dept_id: true,
+      },
+    });
+
+    if (!user) {
+      return res.status(403).json({ message: "User not found" });
+    }
+
+    const { dept_id } = user;
+
+    // 2. Get all skills associated with this department from SkillDepartment
+    const departmentSkills = await prisma.skillDepartment.findMany({
+      where: {
+        dept_id,
+      },
+      include: {
+        skill: true,
+      },
+    });
+
+    if (departmentSkills.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No skills found for this department" });
+    }
+
+    // 3. Get the user's competency level for each skill, if it exists in SkillUsers
+    const skillsInfo = await Promise.all(
+      departmentSkills.map(async (deptSkill) => {
+        const skill_id = deptSkill.skill.skill_id;
+
+        const userSkill = await prisma.skillUsers.findUnique({
+          where: {
+            skill_id_user_id: { skill_id, user_id: req.user.userId },
+          },
+        });
+
+        return {
+          skill_id: skill_id,
+          skill_name: deptSkill.skill.skill_name,
+          competency: userSkill ? userSkill.competency : null,
+        };
+      })
+    );
+
+    return res.status(200).json(skillsInfo);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error retrieving skills information" });
+  }
+};
+
+export const updateUserSkillCompetency = async (req, res) => {
+  try {
+    // 1. Check if the user exists
+    const user = await prisma.user.findUnique({
+      where: {
+        user_id: req.user.userId,
+      },
+    });
+
+    if (!user) {
+      return res.status(403).json({ message: "User not found" });
+    }
+
+    // 2. Extract skill_id and new competency from request body
+    const { skill_id, competency } = req.body;
+
+    if (!skill_id || !competency) {
+      return res
+        .status(400)
+        .json({ message: "Skill ID and competency are required" });
+    }
+
+    // 3. Check if the skill_id and user_id combination exists in SkillUsers
+    const skillUser = await prisma.skillUsers.findUnique({
+      where: {
+        skill_id_user_id: { skill_id, user_id: req.user.userId },
+      },
+    });
+
+    if (!skillUser) {
+      return res
+        .status(404)
+        .json({ message: "Skill entry not found for this user" });
+    }
+
+    // 4. Update the competency in SkillUsers
+    const updatedSkillUser = await prisma.skillUsers.update({
+      where: {
+        skill_id_user_id: { skill_id, user_id: req.user.userId },
+      },
+      data: {
+        competency,
+      },
+    });
+
+    return res
+      .status(200)
+      .json({ message: "Competency updated successfully", updatedSkillUser });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error updating competency" });
   }
 };
