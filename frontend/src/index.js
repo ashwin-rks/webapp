@@ -23,6 +23,7 @@ import Skills from './Components/ProfileComponents/AdminComponents/Skills';
 import Course from './Components/ProfileComponents/AdminComponents/Course';
 
 // User Components
+import UserCourses from './Components/ProfileComponents/UserComponents/UserCourses';
 
 const router = createBrowserRouter([
   {
@@ -63,6 +64,10 @@ const router = createBrowserRouter([
     path: "/user",
     element: <PrivateRoute component={Dashboard} />,
     children: [
+      {
+        path: 'courses',
+        element: <UserCourses />
+      },
       {
         path: 'profile',
         element: <Profile />

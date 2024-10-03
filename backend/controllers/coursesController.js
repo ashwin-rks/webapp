@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+// for admin
 export const getAllCoursesInfo = async (req, res) => {
   try {
     const courses = await prisma.course.findMany({
@@ -269,5 +270,138 @@ export const editCourse = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error updating course" });
+  }
+};
+
+
+// user courses
+export const enrollInCourse = async (req, res) => {
+  try {
+    const user_id = req.user.userId; 
+    const { course_id, user_score } = req.body; 
+
+    const user = await prisma.user.findUnique({
+      where: { user_id: user_id },
+    });
+
+    if (!user || user.account_type !== 'user') {
+      return res.status(404).json({ message: "User not found or not authorized" });
+    }
+
+    const course = await prisma.course.findUnique({
+      where: { course_id: course_id },
+    });
+
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    const existingEnrollment = await prisma.courseUser.findUnique({
+      where: {
+        course_id_user_id: {
+          course_id: course_id,
+          user_id: user_id,
+        },
+      },
+    });
+
+    if (existingEnrollment) {
+      return res.status(400).json({ message: "User is already enrolled in this course" });
+    }
+
+    const parsedScore = parseInt(user_score, 10);
+    if (parsedScore < 0 || parsedScore > 100) {
+      return res.status(400).json({ message: "User score must be between 0 and 100" });
+    }
+
+    // Enroll the user in the course
+    const enrollment = await prisma.courseUser.create({
+      data: {
+        course_id: course_id,
+        user_id: user_id,
+        user_score: parsedScore,
+      },
+    });
+
+    res.status(200).json(enrollment);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error enrolling in course" });
+  }
+};
+
+
+export const getUserCoursesInfo = async (req, res) => {
+  try {
+    const user_id = req.user.userId; 
+
+    const user = await prisma.user.findUnique({
+      where: { user_id: user_id },
+      select: { dept_id: true },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const dept_id = user.dept_id; 
+
+    const courses = await prisma.course.findMany({
+      where: {
+        OR: [
+          {
+            courseUsers: {
+              some: {
+                user_id: user_id,
+              },
+            },
+          },
+          {
+            courseDepartments: {
+              some: {
+                department: {
+                  dept_id: dept_id, 
+                },
+              },
+            },
+            courseUsers: {
+              none: {
+                user_id: user_id, 
+              },
+            },
+          },
+        ],
+      },
+      include: {
+        creator: {
+          select: {
+            first_name: true,
+            last_name: true,
+          },
+        },
+        courseUsers: {
+          where: {
+            user_id: user_id,
+          },
+          select: {
+            user_score: true,
+          },
+        },
+      },
+    });
+
+    const result = courses.map((course) => ({
+      course_id: course.course_id,
+      course_name: course.course_name,
+      course_desc: course.course_desc,
+      course_creator: `${course.creator.first_name} ${course.creator.last_name}`,
+      course_img: course.course_img,
+      user_score: course.courseUsers.length > 0 ? course.courseUsers[0].user_score : null,
+    }));
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error retrieving course information" });
   }
 };
