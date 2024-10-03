@@ -56,7 +56,7 @@ const AddDepartments = ({ existingDepartments }) => {
   
 
   return (
-    <form className="d-flex w-100">
+    <form className="d-flex">
       <div className="flex-grow-1 me-2">
         <input
           type="text"

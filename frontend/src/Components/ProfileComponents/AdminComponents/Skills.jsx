@@ -1,5 +1,4 @@
 import React from 'react'
-import AddSkills from './AddSkills'
 import SkillTable from './SkillTable'
 
 const Skills = () => {

@@ -1,37 +1,42 @@
 import express from "express";
 import {
-  addCourse,
-  addDepartment,
-  addSkill,
-  editCourse,
-  editSkill,
-  getAllCoursesInfo,
-  getAllSkillsInfo,
-  getDepartmentsWithInfo,
-  updateDepartment,
-} from "../controllers/adminContoller.js";
-import {
   authenticateToken,
   checkAdmin,
 } from "../middlewares/authMiddleware.js";
+import {
+  getDepartmentsWithInfo,
+  addDepartment,
+  updateDepartment,
+} from "../controllers/departmentController.js";
+import {
+  getAllSkillsInfo,
+  addSkill,
+  editSkill,
+} from "../controllers/skillsController.js";
+import {
+  getAllCoursesInfo,
+  addCourse,
+  editCourse,
+} from "../controllers/coursesController.js";
 
 const router = express.Router();
 
 router.use(authenticateToken);
 router.use(checkAdmin);
 
+// department
+router.get("/get-departments", getDepartmentsWithInfo);
 router.post("/add-department", addDepartment);
 router.patch("/update-department", updateDepartment);
-router.get("/get-departments", getDepartmentsWithInfo);
 
 // skills
+router.get("/get-skills", getAllSkillsInfo);
 router.post("/add-skill", addSkill);
-router.get('/get-skills', getAllSkillsInfo);
-router.patch('/edit-skill', editSkill);
+router.patch("/edit-skill", editSkill);
 
 // courses
+router.get("/get-courses", getAllCoursesInfo);
 router.post("/add-course", addCourse);
-router.get('/get-courses', getAllCoursesInfo);
-router.patch('/edit-course', editCourse);
+router.patch("/edit-course", editCourse);
 
 export default router;

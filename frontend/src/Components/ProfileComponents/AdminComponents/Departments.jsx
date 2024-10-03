@@ -31,6 +31,11 @@ const Departments = () => {
 
   return (
     <div className="conatainer-fluid w-100">
+      <div className="row">
+        <div className="col-12">
+        <h3 className='p-0 fontColor'>Departments</h3>
+        </div>
+      </div>
       {/* Adds Department */}
       <div className="row">
         <div className="col-12">
@@ -44,7 +49,6 @@ const Departments = () => {
           <DepartmentTable departments={existingDepartments} />
         </div>
       </div>
-
     </div>
   );
 };
