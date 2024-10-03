@@ -18,6 +18,7 @@ import {
   addCourse,
   editCourse,
 } from "../controllers/coursesController.js";
+import { changePassword, editUserInfo, getUserInfo } from "../controllers/profileController.js";
 
 const router = express.Router();
 
@@ -38,5 +39,10 @@ router.patch("/edit-skill", editSkill);
 router.get("/get-courses", getAllCoursesInfo);
 router.post("/add-course", addCourse);
 router.patch("/edit-course", editCourse);
+
+// profile
+router.get('/get-user-info', getUserInfo);
+router.patch('/edit-user-info', editUserInfo);
+router.patch('/change-password', changePassword);
 
 export default router;

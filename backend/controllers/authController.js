@@ -24,7 +24,7 @@ export const login = async (req, res) => {
     if (!isPasswordValid) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
-
+    
     // assign jwt
     const token = jwt.sign(
       { userId: user.user_id, account_type: user.account_type, name: user.first_name },

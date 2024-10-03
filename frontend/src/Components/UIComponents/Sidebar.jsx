@@ -41,7 +41,7 @@ const Sidebar = () => {
           </Link>
         </li>
         <li className="nav-item">
-          <Link to="/profile" className="nav-link d-flex align-items-center">
+          <Link to="/home/profile" className="nav-link d-flex align-items-center">
             <FaUser className="icon" />
             <span className="menu-text">Profile</span>
           </Link>

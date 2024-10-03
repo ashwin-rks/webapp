@@ -15,6 +15,7 @@ import PrivateRoute from './Components/PrivateRoute';
 
 // Profile Components
 import Dashboard from './Components/ProfileComponents/Dashboard';
+import Profile from './Components/ProfileComponents/Profile';
 
 // Admin Compnents
 import Departments from './Components/ProfileComponents/AdminComponents/Departments';
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
       {
         path: "courses",
         element: <Course />
+      },
+      {
+        path: 'profile',
+        element: <Profile />
       }
     ]
   },
