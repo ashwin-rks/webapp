@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode'
 import { FaUser, FaCalendarAlt, FaBuilding } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import EditUser from './EditUser'; 
@@ -9,13 +10,21 @@ const Profile = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);  
   const [error, setError] = useState(null);      
+  const [isAdmin, setIsAdmin] = useState(false); 
 
   useEffect(() => {
     const token = localStorage.getItem('token');
 
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/admin/get-user-info', {
+        const decodedToken = jwtDecode(token); 
+        setIsAdmin(decodedToken.account_type === 'admin'); 
+
+        const endpoint = isAdmin 
+          ? 'http://localhost:8000/admin/get-user-info' 
+          : 'http://localhost:8000/user/get-user-info';
+
+        const response = await axios.get(endpoint, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -31,7 +40,7 @@ const Profile = () => {
     };
 
     fetchUserData();
-  }, []);
+  }, [isAdmin]);
 
   const formatDate = (dateStr) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };

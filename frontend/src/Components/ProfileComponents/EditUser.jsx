@@ -1,8 +1,8 @@
-// EditUser.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { jwtDecode } from "jwt-decode"; 
 
 const EditUser = ({ userInfo }) => {
   const [show, setShow] = useState(false);
@@ -10,6 +10,7 @@ const EditUser = ({ userInfo }) => {
   const [lastName, setLastName] = useState(userInfo.last_name);
   const [isFirstNameInvalid, setIsFirstNameInvalid] = useState(false);
   const [isLastNameInvalid, setIsLastNameInvalid] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
@@ -17,6 +18,14 @@ const EditUser = ({ userInfo }) => {
     setLastName(userInfo.last_name);
     setShow(true);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken = jwtDecode(token); 
+      setIsAdmin(decodedToken.account_type === 'admin'); 
+    }
+  }, []); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,8 +51,12 @@ const EditUser = ({ userInfo }) => {
 
     try {
       const token = localStorage.getItem("token");
+      const endpoint = isAdmin 
+        ? "http://localhost:8000/admin/edit-user-info" 
+        : "http://localhost:8000/user/edit-user-info"; 
+
       const response = await axios.patch(
-        "http://localhost:8000/admin/edit-user-info",
+        endpoint,
         { first_name: firstName, last_name: lastName },
         {
           headers: {

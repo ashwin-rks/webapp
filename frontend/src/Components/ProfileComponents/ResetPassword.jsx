@@ -1,8 +1,8 @@
-// ResetPassword.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { jwtDecode } from "jwt-decode";
 
 const ResetPassword = () => {
   const [show, setShow] = useState(false);
@@ -10,6 +10,7 @@ const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [isOldPasswordInvalid, setIsOldPasswordInvalid] = useState(false);
   const [isNewPasswordInvalid, setIsNewPasswordInvalid] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false); 
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
@@ -17,6 +18,14 @@ const ResetPassword = () => {
     setNewPassword("");
     setShow(true);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken = jwtDecode(token); 
+      setIsAdmin(decodedToken.account_type === 'admin'); 
+    }
+  }, []); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,8 +51,12 @@ const ResetPassword = () => {
 
     try {
       const token = localStorage.getItem("token");
+      const endpoint = isAdmin 
+        ? "http://localhost:8000/admin/change-password" 
+        : "http://localhost:8000/user/change-password"; 
+      
       const response = await axios.patch(
-        "http://localhost:8000/admin/change-password",
+        endpoint,
         { old_password: oldPassword, new_password: newPassword },
         {
           headers: {

@@ -17,11 +17,12 @@ import PrivateRoute from './Components/PrivateRoute';
 import Dashboard from './Components/ProfileComponents/Dashboard';
 import Profile from './Components/ProfileComponents/Profile';
 
-// Admin Compnents
+// Admin Components
 import Departments from './Components/ProfileComponents/AdminComponents/Departments';
 import Skills from './Components/ProfileComponents/AdminComponents/Skills';
 import Course from './Components/ProfileComponents/AdminComponents/Course';
 
+// User Components
 
 const router = createBrowserRouter([
   {
@@ -58,6 +59,16 @@ const router = createBrowserRouter([
       }
     ]
   },
+  {
+    path: "/user",
+    element: <PrivateRoute component={Dashboard} />,
+    children: [
+      {
+        path: 'profile',
+        element: <Profile />
+      }
+    ]
+  }
   // {
   //   path: "*",
   //   element: <ErrorBoundary />,
