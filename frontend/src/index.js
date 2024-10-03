@@ -37,8 +37,8 @@ const router = createBrowserRouter([
     element: <Signup />,
   },
   {
-    path: "/home",
-    element: <PrivateRoute component={Dashboard} />,
+    path: "/admin",
+    element: <PrivateRoute component={Dashboard} adminOnly={true} />,
     children: [
       {
         path: "department",

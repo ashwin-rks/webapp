@@ -70,7 +70,11 @@ const Login = () => {
         if (response.status === 200) {
           localStorage.setItem("token", response.data.token);
           toast.success("Logged in");
-          navigate("/home");
+          if (response.data.user && response.data.user.account_type === 'admin') {
+            navigate("/admin"); 
+          } else {
+            navigate("/user"); 
+          }
         } else {
           console.error("Login failed:", response.data.error);
         }

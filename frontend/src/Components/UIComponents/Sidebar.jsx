@@ -17,31 +17,31 @@ const Sidebar = () => {
       
       <ul className="nav flex-column">
         <li className="nav-item">
-          <Link to="/home" className="nav-link d-flex align-items-center">
+          <Link to="/admin" className="nav-link d-flex align-items-center">
             <FaHome className="icon" />
             <span className="menu-text">Home</span>
           </Link>
         </li>
         <li className="nav-item">
-          <Link to="/home/department" className="nav-link d-flex align-items-center">
+          <Link to="/admin/department" className="nav-link d-flex align-items-center">
             <MdGroups className="icon" />
             <span className="menu-text">Department</span>
           </Link>
         </li>
         <li className="nav-item">
-          <Link to="/home/courses" className="nav-link d-flex align-items-center">
+          <Link to="/admin/courses" className="nav-link d-flex align-items-center">
             <FaGraduationCap className="icon" />
             <span className="menu-text">Courses</span>
           </Link>
         </li>
         <li className="nav-item">
-          <Link to="/home/skills" className="nav-link d-flex align-items-center">
+          <Link to="/admin/skills" className="nav-link d-flex align-items-center">
             <TfiStatsUp className="icon" />
             <span className="menu-text">Skills</span>
           </Link>
         </li>
         <li className="nav-item">
-          <Link to="/home/profile" className="nav-link d-flex align-items-center">
+          <Link to="/admin/profile" className="nav-link d-flex align-items-center">
             <FaUser className="icon" />
             <span className="menu-text">Profile</span>
           </Link>

@@ -8,12 +8,14 @@ import './navbar.css';
 const Navbar = () => {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
+  const [accountType, setAccountType] = useState(""); // State to hold account type
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       const decodedToken = jwtDecode(token);
       setUserName(decodedToken.name);
+      setAccountType(decodedToken.account_type); // Set account type from decoded token
     }
   }, []);
 
@@ -37,7 +39,9 @@ const Navbar = () => {
               {userName || "User"}
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item as={Link} to="/profile">Profile</Dropdown.Item>
+              <Dropdown.Item as={Link} to={accountType === 'admin' ? "/admin/profile" : "/user/profile"}>
+                Profile
+              </Dropdown.Item>
               <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
