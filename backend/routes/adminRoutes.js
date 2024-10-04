@@ -19,6 +19,7 @@ import {
   editCourse,
 } from "../controllers/coursesController.js";
 import { changePassword, editUserInfo, getUserInfo } from "../controllers/profileController.js";
+import { deleteUser, getAllUsersInfo } from "../controllers/employeeController.js";
 
 const router = express.Router();
 
@@ -44,5 +45,9 @@ router.patch("/edit-course", editCourse);
 router.get('/get-user-info', getUserInfo);
 router.patch('/edit-user-info', editUserInfo);
 router.patch('/change-password', changePassword);
+
+//employee
+router.get('/get-users', getAllUsersInfo);
+router.delete('/delete-user/:userId', deleteUser);
 
 export default router;
