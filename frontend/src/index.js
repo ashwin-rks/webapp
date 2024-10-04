@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
-import { AuthProvider } from "./Context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; 
+import { AuthProvider } from "./Context/AuthContext";
 import './index.css';
 
 // Auth Components
@@ -15,7 +15,16 @@ import PrivateRoute from './Components/PrivateRoute';
 
 // Profile Components
 import Dashboard from './Components/ProfileComponents/Dashboard';
+import Profile from './Components/ProfileComponents/Profile';
 
+// Admin Components
+import Departments from './Components/ProfileComponents/AdminComponents/Departments';
+import Skills from './Components/ProfileComponents/AdminComponents/Skills';
+import Course from './Components/ProfileComponents/AdminComponents/Course';
+
+// User Components
+import UserCourses from './Components/ProfileComponents/UserComponents/UserCourses';
+import UserSkills from './Components/ProfileComponents/UserComponents/UserSkills';
 
 const router = createBrowserRouter([
   {
@@ -31,9 +40,45 @@ const router = createBrowserRouter([
     element: <Signup />,
   },
   {
-    path: "/home",
-    element: <PrivateRoute component={Dashboard} />,
+    path: "/admin",
+    element: <PrivateRoute component={Dashboard} adminOnly={true} />,
+    children: [
+      {
+        path: "department",
+        element: <Departments />, 
+      },
+      {
+        path: "skills",
+        element: <Skills />
+      },
+      {
+        path: "courses",
+        element: <Course />
+      },
+      {
+        path: 'profile',
+        element: <Profile />
+      }
+    ]
   },
+  {
+    path: "/user",
+    element: <PrivateRoute component={Dashboard} />,
+    children: [
+      {
+        path: 'courses',
+        element: <UserCourses />
+      },
+      {
+        path: 'skills',
+        element: <UserSkills />
+      },
+      {
+        path: 'profile',
+        element: <Profile />
+      }
+    ]
+  }
   // {
   //   path: "*",
   //   element: <ErrorBoundary />,

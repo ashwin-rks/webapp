@@ -1,0 +1,15 @@
+.custom-nav-pills .nav-link {
+  color: var(--majorelle-blue); 
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.custom-nav-pills .nav-link:hover {
+  background-color: #e0e0e0;
+}
+
+.active-pill {
+  color: white !important;
+  background-color: var(--majorelle-blue) !important;
+}

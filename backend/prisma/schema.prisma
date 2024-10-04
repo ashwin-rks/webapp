@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,13 +8,99 @@ datasource db {
 }
 
 model User {
-  user_id      Int      @id @default(autoincrement())  
-  first_name   String                                   
-  last_name    String                                                     
-  email        String   @unique                        
-  password     String                                  
-  account_type String                                  
+  user_id      Int    @id @default(autoincrement())
+  first_name   String
+  last_name    String
+  email        String @unique
+  password     String
+  account_type String // e.g., admin, user
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  department Department @relation(fields: [dept_id], references: [dept_id])
+  dept_id    Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  skills          SkillUsers[] // Relation to SkillUsers
+  createdCourses  Course[] @relation("UserCreatedCourses") // Relation for courses created by user
+  enrolledCourses CourseUser[] // Relation for courses the user is enrolled in
+}
+
+model Department {
+  dept_id   Int    @id @default(autoincrement())
+  dept_name String
+
+  users            User[] // Relation to User
+  skillDepartments SkillDepartment[] // Relation to SkillDepartment
+  CourseDepartment CourseDepartment[] // Relation to CourseDepartment
+}
+
+model Skill {
+  skill_id   Int    @id @default(autoincrement())
+  skill_name String
+
+  skillDepartments SkillDepartment[] // Relation to SkillDepartment
+  skillUsers       SkillUsers[] // Relation to SkillUsers
+}
+
+model SkillDepartment {
+  id       Int @id @default(autoincrement())
+  skill_id Int
+  dept_id  Int
+
+  skill      Skill      @relation(fields: [skill_id], references: [skill_id])
+  department Department @relation(fields: [dept_id], references: [dept_id])
+
+  @@unique([skill_id, dept_id]) // Ensure a unique combination of skill and department
+}
+
+model SkillUsers {
+  id         Int    @id @default(autoincrement())
+  skill_id   Int
+  user_id    Int
+  competency String
+
+  skill Skill @relation(fields: [skill_id], references: [skill_id])
+  user  User  @relation(fields: [user_id], references: [user_id])
+
+  @@unique([skill_id, user_id]) // Ensure a user can only have one entry per skill
+}
+
+model Course {
+  course_id      Int     @id @default(autoincrement())
+  course_name    String
+  course_desc    String
+  course_creator Int
+  course_img     String? // Optional, in case you want to allow courses without an image
+
+  creator User @relation("UserCreatedCourses", fields: [course_creator], references: [user_id])
+
+  courseDepartments CourseDepartment[] // Relation to CourseDepartment
+  courseUsers       CourseUser[] // Relation to CourseUser
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CourseDepartment {
+  id        Int @id @default(autoincrement())
+  course_id Int
+  dept_id   Int
+
+  course     Course     @relation(fields: [course_id], references: [course_id])
+  department Department @relation(fields: [dept_id], references: [dept_id])
+
+  @@unique([course_id, dept_id]) // Ensure a unique combination of course and department
+}
+
+model CourseUser {
+  id         Int @id @default(autoincrement())
+  course_id  Int
+  user_id    Int
+  user_score Int
+
+  course Course @relation(fields: [course_id], references: [course_id])
+  user   User   @relation(fields: [user_id], references: [user_id])
+
+  @@unique([course_id, user_id]) // Ensure a user can only complete a course once
 }

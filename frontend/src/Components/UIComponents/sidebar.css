@@ -1,0 +1,57 @@
+.sidebar {
+  width: 250px; /* Default sidebar width */
+  background-color: #f8f9fa; /* Light background color */
+  height: 100vh; /* Full height */
+  padding: 20px 0; /* Padding for spacing */
+  position: fixed; /* Fixed position */
+  overflow-y: auto; /* Scrollable if content overflows */
+}
+
+.sidebar-logo {
+  width: 50px;
+}
+
+.company-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--majorelle-blue);
+}
+
+.nav-link {
+  color: var(--majorelle-blue);
+  padding: 10px 20px;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.nav-link:hover {
+  color: white;
+  background: var(--majorelle-blue);
+}
+
+.icon {
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+.menu-text {
+  display: inline-block;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 60px; 
+  }
+  .menu-text {
+    display: none; 
+  }
+
+  .sidebar-logo {
+    width: 30px;
+  }
+
+  .company-name {
+    display: none;
+  }
+
+}

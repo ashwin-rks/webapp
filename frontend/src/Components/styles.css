@@ -1,6 +1,6 @@
 :root {
   --majorelle-blue: #5949f4;
-  --aero: #06bee1;
+  --aero: rgb(6, 190, 225);
   --rich-black: #001220;
 }
 
@@ -24,6 +24,16 @@
   background-color: rgb(72, 59, 206);
 }
 
+.btnColorSecondary {
+  color: var(--rich-black);
+  background-color: var(--aero);
+}
+
+.btnColorSecondary:hover {
+  color: var(--rich-black);
+  background-color: rgb(6, 176, 187);
+}
+
 
 /* Global form control effect */
 .form-control {
@@ -31,8 +41,51 @@
   transition: all 0.3s ease;
   border-color: var(--majorelle-blue);
 }
+
 .form-control:focus {
   color: var(--rich-black);
   border-color: var(--majorelle-blue); 
   box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); 
+}
+
+.form-control-error {
+  color: var(--rich-black);
+  border-color: rgb(200, 0, 0); 
+  box-shadow: 0 0 8px rgba(200, 0, 0, 0.5); 
+}
+
+
+/* Table Effects */
+
+.tableColor {
+  border: 1px solid #5949f4;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.tableHeader th {
+  background-color: #5949f4; 
+  color: white;  
+}
+
+.tableBody {
+  transition: background-color 0.3s ease; 
+}
+
+.tableBody td {
+  transition: background-color 0.3s ease; 
+}
+
+.tableBody tr:hover td {
+  background-color: #E1D8FF; 
+}
+
+/* card */
+
+.card {
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.05);
 }

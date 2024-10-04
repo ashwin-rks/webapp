@@ -24,10 +24,10 @@ export const login = async (req, res) => {
     if (!isPasswordValid) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
-
+    
     // assign jwt
     const token = jwt.sign(
-      { userId: user.id, account_type: user.account_type },
+      { userId: user.user_id, account_type: user.account_type, name: user.first_name },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "10h" }
     );
@@ -35,6 +35,7 @@ export const login = async (req, res) => {
     return res.status(200).json({
       token,
       user: {
+        name: user.first_name,
         account_type: user.account_type,
       },
     });
@@ -45,7 +46,8 @@ export const login = async (req, res) => {
 
 export const signup = async (req, res) => {
   try {
-    const { first_name, last_name, account_type, email, password } = req.body;
+    const { first_name, last_name, account_type, email, password, department } = req.body;
+    const departmentId = parseInt(department, 10);
 
     // Check for required fields
     if (!email || !password || !first_name || !last_name || !account_type) {
@@ -64,6 +66,14 @@ export const signup = async (req, res) => {
       return res.status(400).send({error: 'Invalid account type'});
     }
 
+    if (account_type == 'admin' && departmentId != 1) {
+      return res.status(400).send({error: "Admin must be a Manager"})
+    }
+
+    if (account_type != 'admin' && departmentId == 1) {
+      return res.status(400).send({error: "Wrong department code"})
+    }
+
     // hash password 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -74,7 +84,7 @@ export const signup = async (req, res) => {
         account_type: account_type,
         email: email,
         password: hashedPassword,
-      },
+        department: { connect: { dept_id: departmentId } },      },
     });
 
     const { password: _, ...userWithoutPassword } = newUser;
@@ -82,6 +92,21 @@ export const signup = async (req, res) => {
   } catch (error) {
     console.error(error.message);
     return res.status(500).send({ error: error.message });
+  }
+};
+
+export const getAllDepartments = async (req, res) => {
+  try {
+    const departments = await prisma.department.findMany({
+      select: {
+        dept_id: true,
+        dept_name: true,
+      },
+    });
+
+    return res.status(200).json(departments);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
 };
 

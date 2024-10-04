@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Select from "react-select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import "../styles.css";
@@ -10,10 +11,17 @@ import "./authStyles.css";
 const Signup = () => {
   const navigate = useNavigate();
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [departmentDisabled, setDepartmentDisabled] = useState(false);
+  const [selectedDepartment, setSelectedDepartment] = useState(null);
+  const [selectedAccountType, setSelectedAccountType] = useState(null);
+  const [departmentOptions, setDepartmentOptions] = useState([])
 
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
-  };
+
+
+  const accountTypeOptions = [
+    { value: "user", label: "User" },
+    { value: "admin", label: "Admin" },
+  ];
 
   const [credentials, setCredentials] = useState({
     first_name: "",
@@ -22,14 +30,40 @@ const Signup = () => {
     password: "",
     account_type: "",
   });
+
   const [errors, setErrors] = useState({});
   const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/;
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+  const handleAccountTypeChange = (selectedOption) => {
+    setSelectedAccountType(selectedOption);
+
+    setCredentials({
+      ...credentials,
+      account_type: selectedOption.value,
+    });
+
+    if (selectedOption.value === "admin") {
+      setDepartmentDisabled(true);
+      setSelectedDepartment({ value: 1, label: "Manager" });
+    } else {
+      setDepartmentDisabled(false);
+      setSelectedDepartment(null);
+    }
+  };
 
   const handleChange = (e) => {
     setCredentials({
       ...credentials,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleDepartmentChange = (selectedOption) => {
+    setSelectedDepartment(selectedOption);
   };
 
   // Handles the login form submit
@@ -80,6 +114,13 @@ const Signup = () => {
       };
     }
 
+    if (!selectedDepartment) {
+      newErrors = {
+        ...newErrors,
+        department: "Department is required!",
+      };
+    }
+
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
@@ -88,6 +129,7 @@ const Signup = () => {
       const account_type = credentials.account_type;
       const email = credentials.email;
       const password = credentials.password;
+      const department = selectedDepartment?.value || null;
 
       try {
         const response = await axios.post("http://localhost:8000/auth/signup", {
@@ -96,6 +138,7 @@ const Signup = () => {
           account_type,
           email,
           password,
+          department,
         });
         console.log(response);
         if (response.status === 201) {
@@ -114,6 +157,44 @@ const Signup = () => {
         setErrors(newErrors);
       }
     }
+  };
+
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/auth/get-departments');
+        
+        const options = response.data
+          .filter(department => department.dept_id !== 1) 
+          .map(department => ({
+            value: department.dept_id,
+            label: department.dept_name,
+          }));
+
+        setDepartmentOptions(options);
+      } catch (error) {
+        console.error("Error fetching departments:", error);
+      }
+    };
+
+    fetchDepartments();
+  }, []);
+
+  const customSelectStyles = {
+    control: (provided, state) => ({
+      ...provided,
+      borderRadius: "4px",
+      border: "1px solid #5949f4",
+      boxShadow: state.isFocused ? "0 0 8px rgba(0, 123, 255, 0.5)" : "none",
+      "&:hover": {
+        borderColor: "#5949f4",
+      },
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      color: state.isFocused ? "#fff" : "#333",
+      backgroundColor: state.isFocused ? "#5949f4" : "white",
+    }),
   };
 
   return (
@@ -206,28 +287,46 @@ const Signup = () => {
                   </p>
                 </div>
               )}
+              {/* Account Type Dropdown with react-select */}
               <div className="form-group mt-3">
                 <label htmlFor="account_type" className="fs-5">
                   User Role
                 </label>
-                <select
-                  className="form-control fs-5"
-                  id="account_type"
-                  name="account_type"
-                  onChange={handleChange}
-                  value={credentials.account_type}
-                >
-                  <option value="" disabled>
-                    Select account type
-                  </option>
-                  <option value="user">User</option>
-                  <option value="admin">Admin</option>
-                </select>
+                <Select
+                  value={selectedAccountType}
+                  onChange={handleAccountTypeChange}
+                  options={accountTypeOptions}
+                  className="fs-5"
+                  placeholder="Select account type"
+                  styles={customSelectStyles}
+                />
               </div>
               {errors.account_type && (
                 <div className="mt-1 p-0">
                   <p className="small text-danger m-0 p-0">
                     {errors.account_type}
+                  </p>
+                </div>
+              )}
+              {/* Department Dropdown */}
+              <div className="form-group mt-3">
+                <label htmlFor="department" className="fs-5">
+                  Department
+                </label>
+                <Select
+                  isDisabled={departmentDisabled}
+                  value={selectedDepartment}
+                  onChange={handleDepartmentChange}
+                  options={departmentOptions}
+                  placeholder="Select Department"
+                  className="fs-5"
+                  styles={customSelectStyles}
+                />
+              </div>
+              {errors.department && (
+                <div className="mt-1 p-0">
+                  <p className="small text-danger m-0 p-0">
+                    {errors.department}
                   </p>
                 </div>
               )}
