@@ -3,46 +3,48 @@ import axios from "axios";
 import { Chart } from "primereact/chart";
 import Select from "react-select";
 
-const CourseDepartment = () => {
+const SkillDepartment = () => {
   const [data, setData] = useState([]);
   const [chartData, setChartData] = useState(null);
   const [chartOptions, setChartOptions] = useState({});
-  const [courses, setCourses] = useState([]); 
-  const [selectedCourses, setSelectedCourses] = useState([]); 
+  const [skills, setSkills] = useState([]); 
+  const [selectedSkills, setSelectedSkills] = useState([]); 
 
-  const allOption = { value: "*", label: "All Courses" };
+  const allOption = { value: "*", label: "All Skills" };
 
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
       try {
         const response = await axios.get(
-          "http://localhost:8000/data/get-course-department",
+          "http://localhost:8000/data/get-skills-department",
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-        const responseData = response.data;
+        const responseData = response.data.filter(
+          (dept) => dept.departmentName !== "Manager" 
+        );
         setData(responseData);
 
-        const courseSet = new Set();
+        const skillSet = new Set();
         responseData.forEach((dept) => {
-          dept.courses.forEach((course) => {
-            courseSet.add(course.courseName);
+          dept.skills.forEach((skill) => {
+            skillSet.add(skill.skillName);
           });
         });
 
-        const courseOptions = Array.from(courseSet).map((course) => ({
-          value: course,
-          label: course,
+        const skillOptions = Array.from(skillSet).map((skill) => ({
+          value: skill,
+          label: skill,
         }));
 
-        setCourses([allOption, ...courseOptions]); 
+        setSkills([allOption, ...skillOptions]);
 
-        generateChartData(responseData, courseOptions.map((option) => option.value));
-        setSelectedCourses([allOption, ...courseOptions]);
+        generateChartData(responseData, skillOptions.map((option) => option.value));
+        setSelectedSkills([allOption, ...skillOptions]);
       } catch (error) {
         console.error("Error fetching data", error);
       }
@@ -52,32 +54,32 @@ const CourseDepartment = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const generateChartData = (data, selectedCourseNames) => {
+  const generateChartData = (data, selectedSkillNames) => {
     const filteredData = [];
 
     data.forEach((dept) => {
       const departmentLabel = dept.departmentName;
-      const departmentCourses = dept.courses.filter((course) =>
-        selectedCourseNames.includes(course.courseName)
+      const departmentSkills = dept.skills.filter((skill) =>
+        selectedSkillNames.includes(skill.skillName)
       );
 
-      if (departmentCourses.length > 0) {
-        filteredData.push({ departmentLabel, departmentCourses });
+      if (departmentSkills.length > 0) {
+        filteredData.push({ departmentLabel, departmentSkills });
       }
     });
 
     const output = {
-      labels: selectedCourseNames, 
+      labels: selectedSkillNames, 
       datasets: [],
     };
 
     filteredData.forEach((dept) => {
       const departmentData = Array(output.labels.length).fill(0);
 
-      dept.departmentCourses.forEach((course) => {
-        const index = output.labels.indexOf(course.courseName);
+      dept.departmentSkills.forEach((skill) => {
+        const index = output.labels.indexOf(skill.skillName);
         if (index !== -1) {
-          departmentData[index] = course.enrolledUsers;
+          departmentData[index] = skill.usersWithSkill;
         }
       });
 
@@ -105,30 +107,30 @@ const CourseDepartment = () => {
     setChartOptions(options);
   };
 
-  const handleCourseChange = (selectedOptions) => {
+  const handleSkillChange = (selectedOptions) => {
     if (selectedOptions.some((option) => option.value === allOption.value)) {
-      setSelectedCourses([allOption, ...courses.slice(1)]); 
-      generateChartData(data, courses.slice(1).map((course) => course.value)); 
+      setSelectedSkills([allOption, ...skills.slice(1)]); 
+      generateChartData(data, skills.slice(1).map((skill) => skill.value)); 
     } else {
-      setSelectedCourses(selectedOptions);
-      const selectedCourseNames = selectedOptions.map((option) => option.value);
-      generateChartData(data, selectedCourseNames);
+      setSelectedSkills(selectedOptions);
+      const selectedSkillNames = selectedOptions.map((option) => option.value);
+      generateChartData(data, selectedSkillNames);
     }
   };
 
   return (
     <div className="container mt-5">
       <h2 className="text-center mb-4" style={{ color: "#5949f4" }}>
-        Users Enrolled by Course
+        Users by Skill
       </h2>
 
       <Select
         isMulti
-        options={courses}
-        value={selectedCourses}
-        onChange={handleCourseChange}
+        options={skills}
+        value={selectedSkills}
+        onChange={handleSkillChange}
         className="mb-4"
-        placeholder="Select Course(s)"
+        placeholder="Select Skill(s)"
         closeMenuOnSelect={false}
         theme={(theme) => ({
           ...theme,
@@ -149,4 +151,4 @@ const CourseDepartment = () => {
   );
 };
 
-export default CourseDepartment;
+export default SkillDepartment;
