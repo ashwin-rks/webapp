@@ -25,6 +25,7 @@ import Course from './Components/ProfileComponents/AdminComponents/Course';
 // User Components
 import UserCourses from './Components/ProfileComponents/UserComponents/UserCourses';
 import UserSkills from './Components/ProfileComponents/UserComponents/UserSkills';
+import Home from './Components/ProfileComponents/AdminComponents/Home';
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,14 @@ const router = createBrowserRouter([
     path: "/admin",
     element: <PrivateRoute component={Dashboard} adminOnly={true} />,
     children: [
+      {
+        index: true, 
+        element: <Navigate to="home" />, 
+      },
+      {
+        path: "home",
+        element: <Home />
+      },
       {
         path: "department",
         element: <Departments />, 

@@ -29,7 +29,7 @@ const Sidebar = () => {
         {isAdmin ? (
           <>
             <li className="nav-item">
-              <Link to="/admin" className="nav-link d-flex align-items-center">
+              <Link to="/admin/home" className="nav-link d-flex align-items-center">
                 <FaHome className="icon" />
                 <span className="menu-text">Home</span>
               </Link>
