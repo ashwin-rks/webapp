@@ -53,9 +53,9 @@ const Sidebar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/admin/profile" className="nav-link d-flex align-items-center">
+              <Link to="/admin/users" className="nav-link d-flex align-items-center">
                 <FaUser className="icon" />
-                <span className="menu-text">Profile</span>
+                <span className="menu-text">Users</span>
               </Link>
             </li>
           </>

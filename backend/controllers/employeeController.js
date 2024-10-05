@@ -12,6 +12,11 @@ export const getAllUsersInfo = async (req, res) => {
         email: true,
         account_type: true,
         dept_id: true,
+        department: {
+          select: {
+            dept_name: true,
+          },
+        },
         createdAt: true,
         updatedAt: true,
       },
@@ -25,6 +30,7 @@ export const getAllUsersInfo = async (req, res) => {
       email: user.email,
       accountType: user.account_type,
       deptId: user.dept_id,
+      deptName: user.department.dept_name,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     }));
@@ -45,8 +51,14 @@ export const deleteUser = async (req, res) => {
       where: { user_id: Number(userId) },
     });
 
-    if (user.account_type === 'admin') {
-      return res.status(403).json({ message: "Admin accounts cannot be deleted." });
+    if (!user) {
+      return res.status(403).json({error: `No account found for user ID ${userId}`});
+    }
+
+    if (user.account_type === "admin") {
+      return res
+        .status(403)
+        .json({ message: "Admin accounts cannot be deleted." });
     }
 
     // Delete related entries in SkillUsers and CourseUser

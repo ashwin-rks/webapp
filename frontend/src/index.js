@@ -18,14 +18,16 @@ import Dashboard from './Components/ProfileComponents/Dashboard';
 import Profile from './Components/ProfileComponents/Profile';
 
 // Admin Components
+import Home from './Components/ProfileComponents/AdminComponents/Home';
 import Departments from './Components/ProfileComponents/AdminComponents/Departments';
 import Skills from './Components/ProfileComponents/AdminComponents/Skills';
 import Course from './Components/ProfileComponents/AdminComponents/Course';
+import User from './Components/ProfileComponents/AdminComponents/User';
+
 
 // User Components
 import UserCourses from './Components/ProfileComponents/UserComponents/UserCourses';
 import UserSkills from './Components/ProfileComponents/UserComponents/UserSkills';
-import Home from './Components/ProfileComponents/AdminComponents/Home';
 
 const router = createBrowserRouter([
   {
@@ -63,6 +65,10 @@ const router = createBrowserRouter([
       {
         path: "courses",
         element: <Course />
+      },
+      {
+        path: "users",
+        element: <User />
       },
       {
         path: 'profile',
