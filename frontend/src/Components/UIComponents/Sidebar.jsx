@@ -63,7 +63,7 @@ const Sidebar = () => {
           // User Sidebar Links
           <>
             <li className="nav-item">
-              <Link to="/user" className="nav-link d-flex align-items-center">
+              <Link to="/user/home" className="nav-link d-flex align-items-center">
                 <FaHome className="icon" />
                 <span className="menu-text">Home</span>
               </Link>

@@ -20,12 +20,13 @@ import Profile from './Components/ProfileComponents/Profile';
 // Admin Components
 import Home from './Components/ProfileComponents/AdminComponents/Home';
 import Departments from './Components/ProfileComponents/AdminComponents/Departments';
-import Skills from './Components/ProfileComponents/AdminComponents/Skills';
 import Course from './Components/ProfileComponents/AdminComponents/Course';
+import Skills from './Components/ProfileComponents/AdminComponents/Skills';
 import User from './Components/ProfileComponents/AdminComponents/User';
 
 
 // User Components
+import UserHome from './Components/ProfileComponents/UserComponents/UserHome';
 import UserCourses from './Components/ProfileComponents/UserComponents/UserCourses';
 import UserSkills from './Components/ProfileComponents/UserComponents/UserSkills';
 
@@ -80,6 +81,14 @@ const router = createBrowserRouter([
     path: "/user",
     element: <PrivateRoute component={Dashboard} />,
     children: [
+      {
+        index: true, 
+        element: <Navigate to="home" />, 
+      },
+      {
+        path: 'home',
+        element: <UserHome />
+      },
       {
         path: 'courses',
         element: <UserCourses />
