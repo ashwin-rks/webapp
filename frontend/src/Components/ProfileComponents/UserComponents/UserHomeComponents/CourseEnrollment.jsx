@@ -11,7 +11,7 @@ const CourseEnrollment = ({ userId }) => {
       const token = localStorage.getItem("token");
       let endpoint = `http://localhost:8000/user/get-courses`;
       if (userId) {
-        endpoint = `http://localhost:8000/user/get-courses/${userId}`;
+        endpoint = `http://localhost:8000/data/get-courses/${userId}`;
       }
       try {
         const response = await axios.get(endpoint, {

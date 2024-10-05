@@ -11,7 +11,7 @@ const SkillAttainment = ({ userId }) => {
       const token = localStorage.getItem("token");
       let endpoint = 'http://localhost:8000/user/get-user-skills';
       if (userId) {
-        endpoint = `http://localhost:8000/user/get-user-skills/${userId}`;
+        endpoint = `http://localhost:8000/data/get-user-skills/${userId}`;
       }
       try {
         const response = await axios.get(endpoint, {

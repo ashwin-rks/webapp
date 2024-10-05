@@ -23,6 +23,7 @@ import Departments from './Components/ProfileComponents/AdminComponents/Departme
 import Course from './Components/ProfileComponents/AdminComponents/Course';
 import Skills from './Components/ProfileComponents/AdminComponents/Skills';
 import User from './Components/ProfileComponents/AdminComponents/User';
+import UserDetails from './Components/ProfileComponents/AdminComponents/UserDetails';
 
 
 // User Components
@@ -70,6 +71,10 @@ const router = createBrowserRouter([
       {
         path: "users",
         element: <User />
+      },
+      {
+        path: "users/:userId", 
+        element: <UserDetails /> 
       },
       {
         path: 'profile',

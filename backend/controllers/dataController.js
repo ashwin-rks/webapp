@@ -151,3 +151,144 @@ export const getCourseDepartment = async (req, res) => {
     res.status(500).json({ message: "Error retrieving course enrollment data" });
   }
 };
+
+export const getUserSkillsInfo = async (req, res) => {
+  try {
+    let { userId } = req.params; 
+    userId = parseInt(userId);
+    
+    // 1. Check if the user exists and get their dept_id
+    const user = await prisma.user.findUnique({
+      where: {
+        user_id: userId,
+      },
+      select: {
+        dept_id: true,
+      },
+    });
+
+    if (!user) {
+      return res.status(403).json({ message: "User not found" });
+    }
+
+    const { dept_id } = user;
+
+    // 2. Get all skills associated with this department from SkillDepartment
+    const departmentSkills = await prisma.skillDepartment.findMany({
+      where: {
+        dept_id,
+      },
+      include: {
+        skill: true,
+      },
+    });
+
+    if (departmentSkills.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No skills found for this department" });
+    }
+
+    // 3. Get the user's competency level for each skill, if it exists in SkillUsers
+    const skillsInfo = await Promise.all(
+      departmentSkills.map(async (deptSkill) => {
+        const skill_id = deptSkill.skill.skill_id;
+
+        const userSkill = await prisma.skillUsers.findUnique({
+          where: {
+            skill_id_user_id: { skill_id, user_id: userId },
+          },
+        });
+
+        return {
+          skill_id: skill_id,
+          skill_name: deptSkill.skill.skill_name,
+          competency: userSkill ? userSkill.competency : null,
+        };
+      })
+    );
+
+    return res.status(200).json(skillsInfo);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error retrieving skills information" });
+  }
+};
+
+
+
+export const getUserCoursesInfo = async (req, res) => {
+  try {
+    let { userId } = req.params; 
+    userId = parseInt(userId);
+
+    const user = await prisma.user.findUnique({
+      where: { user_id: userId },
+      select: { dept_id: true },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const dept_id = user.dept_id; 
+
+    const courses = await prisma.course.findMany({
+      where: {
+        OR: [
+          {
+            courseUsers: {
+              some: {
+                user_id: userId,
+              },
+            },
+          },
+          {
+            courseDepartments: {
+              some: {
+                department: {
+                  dept_id: dept_id, 
+                },
+              },
+            },
+            courseUsers: {
+              none: {
+                user_id: userId, 
+              },
+            },
+          },
+        ],
+      },
+      include: {
+        creator: {
+          select: {
+            first_name: true,
+            last_name: true,
+          },
+        },
+        courseUsers: {
+          where: {
+            user_id: userId,
+          },
+          select: {
+            user_score: true,
+          },
+        },
+      },
+    });
+
+    const result = courses.map((course) => ({
+      course_id: course.course_id,
+      course_name: course.course_name,
+      course_desc: course.course_desc,
+      course_creator: `${course.creator.first_name} ${course.creator.last_name}`,
+      course_img: course.course_img,
+      user_score: course.courseUsers.length > 0 ? course.courseUsers[0].user_score : null,
+    }));
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error retrieving course information" });
+  }
+};

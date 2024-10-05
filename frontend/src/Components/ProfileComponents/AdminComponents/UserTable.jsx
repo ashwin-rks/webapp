@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaEye, FaTrashAlt, FaSearch } from "react-icons/fa";
 import { Modal, Button } from "react-bootstrap";
@@ -11,6 +12,8 @@ const UserTable = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [currentUserName, setCurrentUserName] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -64,6 +67,10 @@ const UserTable = () => {
     setCurrentUserName(null);
   };
 
+  const handleView = (userId) => {
+    navigate(`/admin/users/${userId}`); 
+  };
+
   return (
     <div className="container mt-4">
       <div className="row">
@@ -111,7 +118,7 @@ const UserTable = () => {
                     <span className="text-muted">Admin</span>
                   ) : (
                     <>
-                      <button className="btn btnColorSecondary me-2">
+                      <button className="btn btnColorSecondary me-2" onClick={() => handleView(user.id)}>
                         <FaEye /> View
                       </button>
                       <button
