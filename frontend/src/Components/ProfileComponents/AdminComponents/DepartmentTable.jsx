@@ -3,6 +3,7 @@ import axios from "axios";
 import { FaEdit, FaEye, FaSearch } from "react-icons/fa"; 
 import { Modal, Button, Form } from "react-bootstrap"; 
 import "../../styles.css"; 
+import { toast } from "react-toastify";
 
 const DepartmentTable = ({ departments }) => {
   const [searchTerm, setSearchTerm] = useState(""); 
@@ -37,8 +38,10 @@ const DepartmentTable = ({ departments }) => {
       });
   
       console.log('Update Response:', response.data); 
+      toast.success('Updated department');
     } catch (error) {
       console.error('Error updating department:', error.response ? error.response.data : error.message);
+      toast.error('Unable to update department');
     }
 
     setShowModal(false); 
