@@ -29,6 +29,7 @@ const CourseEnrollment = ({ userId }) => {
     };
 
     fetchData();
+    // eslint-disable-next-line
   }, []);
 
   const generateChartData = (data) => {

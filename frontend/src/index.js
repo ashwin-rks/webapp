@@ -20,6 +20,7 @@ import Profile from './Components/ProfileComponents/Profile';
 // Admin Components
 import Home from './Components/ProfileComponents/AdminComponents/Home';
 import Departments from './Components/ProfileComponents/AdminComponents/Departments';
+import DepartmentView from './Components/ProfileComponents/AdminComponents/AdminViewComponents/DepartmentView';
 import Course from './Components/ProfileComponents/AdminComponents/Course';
 import Skills from './Components/ProfileComponents/AdminComponents/Skills';
 import User from './Components/ProfileComponents/AdminComponents/User';
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
       {
         path: "department",
         element: <Departments />, 
+      },
+      {
+        path: "department/:deptId",
+        element: <DepartmentView />
       },
       {
         path: "skills",
@@ -107,6 +112,10 @@ const router = createBrowserRouter([
         element: <Profile />
       }
     ]
+  },
+  {
+    path: "test",
+    element: <DepartmentView />
   }
   // {
   //   path: "*",

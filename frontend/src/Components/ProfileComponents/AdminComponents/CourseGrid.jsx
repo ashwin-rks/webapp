@@ -10,7 +10,7 @@ import {
   Modal,
   Form,
 } from "react-bootstrap";
-import { FaEye, FaEdit, FaSearch } from "react-icons/fa";
+import { FaEdit, FaSearch } from "react-icons/fa";
 import Select from "react-select";
 import AddCourse from "./AddCourse";
 import "../../styles.css";
@@ -197,9 +197,6 @@ const CourseGrid = () => {
                   <strong>Created By:</strong> {course.creator}
                 </Card.Text>
                 <div className="d-flex justify-content-between">
-                <button className="btn btnColorSecondary">
-                    <FaEye /> View
-                  </button>
                   <Button
                     className="btn btn-primary btnColor"
                     onClick={() => handleEdit(course)}
