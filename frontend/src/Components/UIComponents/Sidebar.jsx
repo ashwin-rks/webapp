@@ -29,7 +29,7 @@ const Sidebar = () => {
         {isAdmin ? (
           <>
             <li className="nav-item">
-              <Link to="/admin" className="nav-link d-flex align-items-center">
+              <Link to="/admin/home" className="nav-link d-flex align-items-center">
                 <FaHome className="icon" />
                 <span className="menu-text">Home</span>
               </Link>
@@ -53,9 +53,9 @@ const Sidebar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/admin/profile" className="nav-link d-flex align-items-center">
+              <Link to="/admin/users" className="nav-link d-flex align-items-center">
                 <FaUser className="icon" />
-                <span className="menu-text">Profile</span>
+                <span className="menu-text">Users</span>
               </Link>
             </li>
           </>
@@ -63,7 +63,7 @@ const Sidebar = () => {
           // User Sidebar Links
           <>
             <li className="nav-item">
-              <Link to="/user" className="nav-link d-flex align-items-center">
+              <Link to="/user/home" className="nav-link d-flex align-items-center">
                 <FaHome className="icon" />
                 <span className="menu-text">Home</span>
               </Link>

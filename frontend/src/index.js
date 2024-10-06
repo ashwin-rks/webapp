@@ -18,11 +18,17 @@ import Dashboard from './Components/ProfileComponents/Dashboard';
 import Profile from './Components/ProfileComponents/Profile';
 
 // Admin Components
+import Home from './Components/ProfileComponents/AdminComponents/Home';
 import Departments from './Components/ProfileComponents/AdminComponents/Departments';
-import Skills from './Components/ProfileComponents/AdminComponents/Skills';
+import DepartmentView from './Components/ProfileComponents/AdminComponents/AdminViewComponents/DepartmentView';
 import Course from './Components/ProfileComponents/AdminComponents/Course';
+import Skills from './Components/ProfileComponents/AdminComponents/Skills';
+import User from './Components/ProfileComponents/AdminComponents/User';
+import UserDetails from './Components/ProfileComponents/AdminComponents/UserDetails';
+
 
 // User Components
+import UserHome from './Components/ProfileComponents/UserComponents/UserHome';
 import UserCourses from './Components/ProfileComponents/UserComponents/UserCourses';
 import UserSkills from './Components/ProfileComponents/UserComponents/UserSkills';
 
@@ -44,8 +50,20 @@ const router = createBrowserRouter([
     element: <PrivateRoute component={Dashboard} adminOnly={true} />,
     children: [
       {
+        index: true, 
+        element: <Navigate to="home" />, 
+      },
+      {
+        path: "home",
+        element: <Home />
+      },
+      {
         path: "department",
         element: <Departments />, 
+      },
+      {
+        path: "department/:deptId",
+        element: <DepartmentView />
       },
       {
         path: "skills",
@@ -54,6 +72,14 @@ const router = createBrowserRouter([
       {
         path: "courses",
         element: <Course />
+      },
+      {
+        path: "users",
+        element: <User />
+      },
+      {
+        path: "users/:userId", 
+        element: <UserDetails /> 
       },
       {
         path: 'profile',
@@ -65,6 +91,14 @@ const router = createBrowserRouter([
     path: "/user",
     element: <PrivateRoute component={Dashboard} />,
     children: [
+      {
+        index: true, 
+        element: <Navigate to="home" />, 
+      },
+      {
+        path: 'home',
+        element: <UserHome />
+      },
       {
         path: 'courses',
         element: <UserCourses />
@@ -78,6 +112,10 @@ const router = createBrowserRouter([
         element: <Profile />
       }
     ]
+  },
+  {
+    path: "test",
+    element: <DepartmentView />
   }
   // {
   //   path: "*",

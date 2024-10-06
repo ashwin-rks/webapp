@@ -22,7 +22,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   skills          SkillUsers[] // Relation to SkillUsers
-  createdCourses  Course[] @relation("UserCreatedCourses") // Relation for courses created by user
+  createdCourses  Course[]     @relation("UserCreatedCourses") // Relation for courses created by user
   enrolledCourses CourseUser[] // Relation for courses the user is enrolled in
 }
 
@@ -61,7 +61,7 @@ model SkillUsers {
   competency String
 
   skill Skill @relation(fields: [skill_id], references: [skill_id])
-  user  User  @relation(fields: [user_id], references: [user_id])
+  user  User  @relation(fields: [user_id], references: [user_id], onDelete: Cascade) // Specify onDelete here
 
   @@unique([skill_id, user_id]) // Ensure a user can only have one entry per skill
 }
@@ -100,7 +100,7 @@ model CourseUser {
   user_score Int
 
   course Course @relation(fields: [course_id], references: [course_id])
-  user   User   @relation(fields: [user_id], references: [user_id])
+  user   User   @relation(fields: [user_id], references: [user_id], onDelete: Cascade) // Specify onDelete here
 
   @@unique([course_id, user_id]) // Ensure a user can only complete a course once
 }

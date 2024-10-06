@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 import { FaEdit, FaEye, FaSearch } from "react-icons/fa"; 
 import { Modal, Button, Form } from "react-bootstrap"; 
 import "../../styles.css"; 
@@ -8,6 +10,8 @@ const DepartmentTable = ({ departments }) => {
   const [searchTerm, setSearchTerm] = useState(""); 
   const [showModal, setShowModal] = useState(false); 
   const [currentDepartment, setCurrentDepartment] = useState(null); 
+
+  const navigate = useNavigate();
 
   const filteredDepartments = departments.filter((department) =>
     department.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -37,13 +41,18 @@ const DepartmentTable = ({ departments }) => {
       });
   
       console.log('Update Response:', response.data); 
+      toast.success('Updated department');
     } catch (error) {
       console.error('Error updating department:', error.response ? error.response.data : error.message);
+      toast.error('Unable to update department');
     }
 
     setShowModal(false); 
   };
   
+  const handleView = (deptId) => {
+    navigate(`/admin/department/${deptId}`); 
+  };
 
   return (
     <div className="container mt-4">
@@ -83,7 +92,7 @@ const DepartmentTable = ({ departments }) => {
                 <td>{department.name}</td>
                 <td>{department.totalPeople}</td>
                 <td>
-                  <button className="btn btnColorSecondary me-2">
+                  <button className="btn btnColorSecondary me-2" onClick={() => handleView(department.id)}>
                     <FaEye /> View
                   </button>
                   <button className="btn btn-primary btnColor" onClick={() => handleEdit(department)}>

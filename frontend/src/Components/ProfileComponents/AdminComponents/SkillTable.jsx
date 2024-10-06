@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { FaEdit, FaEye, FaSearch } from "react-icons/fa";
+import { FaEdit, FaSearch } from "react-icons/fa";
 import AddSkills from "./AddSkills";
 import { Modal, Button, Form } from "react-bootstrap";
 import Select from "react-select";
@@ -180,9 +180,6 @@ const SkillTable = () => {
                 <td>{skill.totalPeople}</td>
                 <td>{skill.totalDepartments}</td>
                 <td>
-                  <button className="btn btnColorSecondary me-2">
-                    <FaEye /> View
-                  </button>
                   <button
                     className="btn btn-primary btnColor"
                     onClick={() => handleEdit(skill)}
