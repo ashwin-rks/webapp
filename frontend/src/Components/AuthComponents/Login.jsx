@@ -42,12 +42,13 @@ const Login = () => {
         ...newErrors,
         email: "Email is required!",
       };
-    } else if (!emailRegex.test(credentials.email.trim())) {
-      newErrors = {
-        ...newErrors,
-        email: "Enter a valid email!",
-      };
-    }
+    } 
+    // else if (!emailRegex.test(credentials.email.trim())) {
+    //   newErrors = {
+    //     ...newErrors,
+    //     email: "Enter a valid email!",
+    //   };
+    // }
 
     // Checks for errors in Password field
     if (!credentials.password.trim()) {
