@@ -39,10 +39,14 @@ const CourseDepartment = () => {
           label: course,
         }));
 
-        setCourses([allOption, ...courseOptions]); 
+        setCourses([allOption, ...courseOptions]);
 
-        generateChartData(responseData, courseOptions.map((option) => option.value));
-        setSelectedCourses([allOption, ...courseOptions]);
+        // Select top 5 courses for initial state
+        const topCourses = courseOptions.slice(0, 5);
+        setSelectedCourses(topCourses); // Set initially selected courses
+
+        // Generate chart data based on the top 5 courses
+        generateChartData(responseData, topCourses.map((option) => option.value));
       } catch (error) {
         console.error("Error fetching data", error);
       }

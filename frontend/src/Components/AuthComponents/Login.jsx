@@ -16,8 +16,6 @@ const Login = () => {
   });
   const [errors, setErrors] = useState({});
 
-  const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/;
-
   // set visibility for password
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -43,12 +41,6 @@ const Login = () => {
         email: "Email is required!",
       };
     } 
-    // else if (!emailRegex.test(credentials.email.trim())) {
-    //   newErrors = {
-    //     ...newErrors,
-    //     email: "Enter a valid email!",
-    //   };
-    // }
 
     // Checks for errors in Password field
     if (!credentials.password.trim()) {

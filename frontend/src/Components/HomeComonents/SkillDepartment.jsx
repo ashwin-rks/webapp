@@ -43,8 +43,11 @@ const SkillDepartment = () => {
 
         setSkills([allOption, ...skillOptions]);
 
-        generateChartData(responseData, skillOptions.map((option) => option.value));
-        setSelectedSkills([allOption, ...skillOptions]);
+        // Set the top 15 skills as default selected skills
+        const topSkills = skillOptions.slice(0, 15);
+        setSelectedSkills([allOption, ...topSkills]);
+
+        generateChartData(responseData, topSkills.map((option) => option.value));
       } catch (error) {
         console.error("Error fetching data", error);
       }

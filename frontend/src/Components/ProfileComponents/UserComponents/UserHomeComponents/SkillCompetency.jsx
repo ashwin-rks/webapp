@@ -5,7 +5,6 @@ import { Chart } from "primereact/chart";
 const SkillCompetency = ( {userId} ) => {
   const [chartData, setChartData] = useState(null);
   const [chartOptions, setChartOptions] = useState({});
-  console.log(userId);
   
   useEffect(() => {
     const fetchData = async () => {
@@ -29,12 +28,13 @@ const SkillCompetency = ( {userId} ) => {
     };
 
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const generateChartData = (data) => {
-    const beginnerSkills = data.filter((skill) => skill.competency === "Beginner").length;
-    const intermediateSkills = data.filter((skill) => skill.competency === "Intermediate").length;
-    const advancedSkills = data.filter((skill) => skill.competency === "Advanced").length;
+    const beginnerSkills = data.filter((skill) => skill.competency === "beginner").length;
+    const intermediateSkills = data.filter((skill) => skill.competency === "intermediate").length;
+    const advancedSkills = data.filter((skill) => skill.competency === "advanced").length;
 
     const output = {
       labels: ["Beginner", "Intermediate", "Advanced"],
@@ -76,6 +76,7 @@ const SkillCompetency = ( {userId} ) => {
     setChartOptions(options);
   };
 
+  
   return (
     <div className="container mt-5">
       <h2 className="text-center mb-4" style={{ color: "#5949f4" }}>

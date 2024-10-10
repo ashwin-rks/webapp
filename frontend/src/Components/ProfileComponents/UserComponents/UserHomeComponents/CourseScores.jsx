@@ -9,9 +9,9 @@ const CourseScores = ({ userId }) => {
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
-      let endpoint = "http://localhost:8000/user/get-courses"
+      let endpoint = "http://localhost:8000/user/get-courses";
       if (userId) {
-        endpoint = `http://localhost:8000/data/get-courses/${userId}`
+        endpoint = `http://localhost:8000/data/get-courses/${userId}`;
       }
 
       try {
@@ -30,12 +30,18 @@ const CourseScores = ({ userId }) => {
     };
 
     fetchData();
-  }, []);
+  }, [userId]); // Include userId as a dependency
 
   const generateChartData = (data) => {
     const enrolledCourses = data.filter((course) => course.user_score !== null);
-    const courseNames = enrolledCourses.map((course) => course.course_name);
-    const courseScores = enrolledCourses.map((course) => course.user_score);
+    
+    // Sort courses by score in descending order and slice the top 5
+    const topCourses = enrolledCourses
+      .sort((a, b) => b.user_score - a.user_score)
+      .slice(0, 5);
+    
+    const courseNames = topCourses.map((course) => course.course_name);
+    const courseScores = topCourses.map((course) => course.user_score);
 
     const output = {
       labels: courseNames,

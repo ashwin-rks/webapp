@@ -4,24 +4,32 @@ const prisma = new PrismaClient();
 
 export const getUserGrowthOverTime = async (req, res) => {
   try {
-    const users = await prisma.user.groupBy({
-      by: ["createdAt"],
-      _count: {
-        user_id: true,
-      },
-      orderBy: {
-        createdAt: "asc",
+    const users = await prisma.user.findMany({
+      select: {
+        createdAt: true,
       },
     });
 
-    const result = users.map((user) => ({
-      month: user.createdAt.toLocaleString("default", {
+    const userCounts = {};
+
+    users.forEach(user => {
+      const monthYear = new Date(user.createdAt).toLocaleString("default", {
         month: "long",
         year: "numeric",
-      }),
-      userCount: user._count.user_id,
+      });
+
+      if (!userCounts[monthYear]) {
+        userCounts[monthYear] = 0;
+      }
+      userCounts[monthYear]++;
+    });
+
+    const result = Object.entries(userCounts).map(([month, userCount]) => ({
+      month,
+      userCount,
     }));
 
+    result.sort((a, b) => new Date(a.month) - new Date(b.month));
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
